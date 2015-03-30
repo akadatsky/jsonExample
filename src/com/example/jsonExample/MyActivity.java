@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ListView;
 import com.example.jsonExample.model.GiphyGifInfo;
 import com.example.jsonExample.model.GiphyResponse;
 import com.google.gson.Gson;
@@ -71,22 +70,17 @@ public class MyActivity extends Activity {
                 for (GiphyGifInfo gitInfo : response.getData()) {
                     urls.add(gitInfo.getImages().getOriginal().getUrl());
                 }
-
                 Log.i("MyActivityTag", "urls count:" + urls.size());
-
-
-                String urlsString = "";
-                for (String url : urls) {
-                    urlsString += url + "\n";
-                }
-                TextView textView = (TextView) findViewById(R.id.result);
-                textView.setText(urlsString);
-
-
+                showListView(urls);
             }
-            Toast.makeText(MyActivity.this, "Task finished", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void showListView(List<String> urls) {
+        ListView listView = (ListView) findViewById(R.id.list);
+        MyAdapter adapter = new MyAdapter(this, urls);
+        listView.setAdapter(adapter);
     }
 
 }
