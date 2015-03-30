@@ -1,48 +1,35 @@
 package com.example.jsonExample;
 
-import java.util.Random;
-
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 public class PageFragment extends Fragment {
 
-    static final String ARGUMENT_PAGE_NUMBER = "arg_page_number";
-
-    int pageNumber;
-    int backColor;
-
-    static PageFragment newInstance(int page) {
-        PageFragment pageFragment = new PageFragment();
-        Bundle arguments = new Bundle();
-        arguments.putInt(ARGUMENT_PAGE_NUMBER, page);
-        pageFragment.setArguments(arguments);
-        return pageFragment;
-    }
+    private String url;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageNumber = getArguments().getInt(ARGUMENT_PAGE_NUMBER);
-
-        Random rnd = new Random();
-        backColor = Color.argb(40, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        url = getArguments().getString("url");
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment, null);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        TextView tvPage = (TextView) view.findViewById(R.id.tvPage);
-        tvPage.setText("Page " + pageNumber);
-        tvPage.setBackgroundColor(backColor);
+        View view = inflater.inflate(R.layout.fragment, container, false);
+
+        ImageView imageView = (ImageView) view.findViewById(R.id.image);
+
+        Glide.with(getActivity()).load(url).asGif().centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(imageView);
+
 
         return view;
     }
+
 }

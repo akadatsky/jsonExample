@@ -30,7 +30,7 @@ public class MyActivity extends FragmentActivity {
     private static final int count = 10;
     private int page = 1;
 
-    private PagerAdapter pagerAdapter;
+    private MyFragmentPagerAdapter pagerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,6 @@ public class MyActivity extends FragmentActivity {
                     urls.add(gitInfo.getImages().getOriginal().getUrl());
                 }
                 Log.i("MyActivityTag", "urls count:" + urls.size());
-//                showListView(urls);
                 showViewPager(urls);
             }
         }
@@ -88,34 +87,11 @@ public class MyActivity extends FragmentActivity {
 
     private void showViewPager(List<String> urls) {
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), urls);
         viewPager.setAdapter(pagerAdapter);
     }
 
-//    private void showListView(List<String> urls) {
-//        ListView listView = (ListView) findViewById(R.id.list);
-//        MyAdapter adapter = new MyAdapter(this, urls);
-//        listView.setAdapter(adapter);
-//    }
 
-    private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
-        private static final int PAGE_COUNT = 10;
-
-        public MyFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return PageFragment.newInstance(position);
-        }
-
-        @Override
-        public int getCount() {
-            return PAGE_COUNT;
-        }
-
-    }
 
 }
