@@ -3,6 +3,12 @@ package com.example.jsonExample;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,12 +23,14 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyActivity extends Activity {
+public class MyActivity extends FragmentActivity {
 
     private static final String URL = "http://api.giphy.com/v1/gifs/search";
     private static final String REQUEST_STRING = "funny cat";
     private static final int count = 10;
     private int page = 1;
+
+    private PagerAdapter pagerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +53,7 @@ public class MyActivity extends Activity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                List<NameValuePair> requestParams = new ArrayList<>();
+                List<NameValuePair> requestParams = new ArrayList<NameValuePair>();
                 requestParams.add(new BasicNameValuePair("q", REQUEST_STRING));
                 requestParams.add(new BasicNameValuePair("api_key", "dc6zaTOxFJmzC"));
                 requestParams.add(new BasicNameValuePair("limit", String.valueOf(count)));
@@ -66,21 +74,48 @@ public class MyActivity extends Activity {
                 // parse json:
                 GiphyResponse response = gson.fromJson(jsonString, GiphyResponse.class);
 
-                List<String> urls = new ArrayList<>();
+                List<String> urls = new ArrayList<String>();
                 for (GiphyGifInfo gitInfo : response.getData()) {
                     urls.add(gitInfo.getImages().getOriginal().getUrl());
                 }
                 Log.i("MyActivityTag", "urls count:" + urls.size());
-                showListView(urls);
+//                showListView(urls);
+                showViewPager(urls);
             }
         }
 
     }
 
-    private void showListView(List<String> urls) {
-        ListView listView = (ListView) findViewById(R.id.list);
-        MyAdapter adapter = new MyAdapter(this, urls);
-        listView.setAdapter(adapter);
+    private void showViewPager(List<String> urls) {
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+    }
+
+//    private void showListView(List<String> urls) {
+//        ListView listView = (ListView) findViewById(R.id.list);
+//        MyAdapter adapter = new MyAdapter(this, urls);
+//        listView.setAdapter(adapter);
+//    }
+
+    private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        private static final int PAGE_COUNT = 10;
+
+        public MyFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return PageFragment.newInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
     }
 
 }
