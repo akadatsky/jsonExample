@@ -1,6 +1,7 @@
 package com.example.jsonExample;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,9 +41,11 @@ public class MyActivity extends FragmentActivity {
         findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyTask task = new MyTask();
-                task.execute();
-                page++;
+//                MyTask task = new MyTask();
+//                task.execute();
+//                page++;
+                Intent intent = new Intent(MyActivity.this, SearchActivity.class);
+                startActivity(intent);
             }
         });
 
