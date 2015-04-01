@@ -63,9 +63,21 @@ public class SearchActivity extends Activity {
         showActivityAnimation(SearchActivity.this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        text.requestFocus();
+        showKeyboard(this);
+    }
+
     public static void hideKeyboard(Context context, IBinder windowToken) {
         InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(windowToken, 0);
+    }
+
+    public static void showKeyboard(Context context) {
+        InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     public static void showActivityAnimation(Activity activity) {
